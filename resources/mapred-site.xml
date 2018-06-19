@@ -19,7 +19,7 @@
 <configuration>
     <property>
         <name>mapred.job.tracker</name>
-        <value>hadoop1:49001</value>
+        <value>10.40.59.154:49001</value>
     </property>
 
     <property>
@@ -30,5 +30,10 @@
     <property>
         <name>mapreduce.framework.name</name>
         <value>yarn</value>
+    </property>
+
+    <property>
+        <name>mapreduce.app-submission.cross-platform</name>
+        <value>true</value>
     </property>
 </configuration>

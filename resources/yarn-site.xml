@@ -18,7 +18,7 @@
 
     <property>
         <name>yarn.resourcemanager.hostname</name>
-        <value>hadoop1</value>
+        <value>10.40.59.154</value>
     </property>
 
     <property>
