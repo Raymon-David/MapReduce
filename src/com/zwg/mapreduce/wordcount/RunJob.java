@@ -10,6 +10,8 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import static java.lang.System.*;
+
 /**
  * @author zwg
  */
@@ -19,9 +21,7 @@ public class RunJob {
     public static void main(String[] args) {
         //创建配置文件
         Configuration configuration = new Configuration();
-//        configuration.set("fs.default.name", "hdfs://10.40.59.154:9000");
-//        configuration.set("yarn.resourcemanager.hostname", "10.40.59.154:8032");
-        configuration.set("mapreduce.jar", "E:\\IDEA\\workspace\\mapreduce\\out\\artifacts\\mapreduce\\mapreduce.jar");
+        configuration.set("mapred.jar", "E:\\IDEA\\workspace\\mapreduce\\out\\artifacts\\mapreduce\\mapreduce.jar");
 
         try {
             //URI uri = new URI(hdfsUrl.trim());
@@ -47,7 +47,7 @@ public class RunJob {
 
             boolean f = job.waitForCompletion(true);
             if(f){
-                System.out.println("job任务执行成功");
+                out.println("job任务执行成功");
             }
         } catch (Exception e) {
             e.printStackTrace();
