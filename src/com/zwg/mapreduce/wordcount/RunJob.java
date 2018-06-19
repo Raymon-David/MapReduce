@@ -10,8 +10,9 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import java.net.URI;
-
+/**
+ * @author zwg
+ */
 public class RunJob {
     //public static String hdfsUrl = "hdfs://10.40.59.154:9000";
 
@@ -20,6 +21,7 @@ public class RunJob {
         Configuration configuration = new Configuration();
 //        configuration.set("fs.default.name", "hdfs://10.40.59.154:9000");
 //        configuration.set("yarn.resourcemanager.hostname", "10.40.59.154:8032");
+        configuration.set("mapreduce.jar", "E:\\IDEA\\workspace\\mapreduce\\out\\artifacts\\mapreduce\\mapreduce.jar");
 
         try {
             //URI uri = new URI(hdfsUrl.trim());
