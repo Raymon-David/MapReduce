@@ -1,10 +1,10 @@
-package com.zwg.mapreduce.recommendfriends;
+package com.zwg.mapreduce.recommendfriends.mapper;
 
+import com.zwg.mapreduce.recommendfriends.util.FridenOfFriend;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.util.StringUtils;
-import org.mortbay.util.StringUtil;
 
 import java.io.IOException;
 

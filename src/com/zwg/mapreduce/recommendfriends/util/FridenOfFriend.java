@@ -1,4 +1,4 @@
-package com.zwg.mapreduce.recommendfriends;
+package com.zwg.mapreduce.recommendfriends.util;
 
 import org.apache.hadoop.io.Text;
 

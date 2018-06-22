@@ -1,10 +1,17 @@
 package com.zwg.mapreduce.recommendfriends;
 
+import com.zwg.mapreduce.recommendfriends.mapper.RecommendFriendsMapper;
+import com.zwg.mapreduce.recommendfriends.mapper.RecommendFriendsSortMapper;
+import com.zwg.mapreduce.recommendfriends.reducer.RecommendFriendsReducer;
+import com.zwg.mapreduce.recommendfriends.reducer.RecommendFriendsSortReducer;
+import com.zwg.mapreduce.recommendfriends.util.FridenOfFriend;
+import com.zwg.mapreduce.recommendfriends.util.FriendsGroup;
+import com.zwg.mapreduce.recommendfriends.util.FriendsSort;
+import com.zwg.mapreduce.recommendfriends.util.User;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
@@ -15,31 +22,29 @@ import static java.lang.System.out;
 public class RunJob {
 
     public static void main(String[] args) {
-
         //创建配置文件
         Configuration configuration = new Configuration();
         configuration.set("mapred.jar", "E:\\IDEA\\workspace\\mapreduce\\out\\artifacts\\mapreduce\\mapreduce.jar");
 
-        run1(configuration);
-
+        if (run1(configuration)){
+            run2(configuration);
+        }
     }
 
-    public static void run1(Configuration configuration){
-
+    //对friend文件中的好友关系进行分析，并得出间接好友出现的次数
+    public static boolean run1(Configuration configuration){
         try {
             //URI uri = new URI(hdfsUrl.trim());
             FileSystem fs = FileSystem.get(configuration);
             Job job = Job.getInstance(configuration);
 
-            job.setJarByClass(com.zwg.mapreduce.wordcount.RunJob.class);
+            job.setJarByClass(com.zwg.mapreduce.recommendfriends.RunJob.class);
             job.setJobName("recommendfriends");
             job.setMapperClass(RecommendFriendsMapper.class);
             job.setReducerClass(RecommendFriendsReducer.class);
             job.setMapOutputKeyClass(FridenOfFriend.class);
             job.setMapOutputValueClass(IntWritable.class);
             job.setInputFormatClass(KeyValueTextInputFormat.class);
-//            job.setOutputKeyClass(Text.class);
-//            job.setOutputValueClass(IntWritable.class);
 
             //input和output的路径是指在HDFS上的路径，不是操作系统上的路径
             FileInputFormat.addInputPath(job, new Path("/usr/hadoop/input/recommenfriends"));
@@ -53,10 +58,51 @@ public class RunJob {
 
             boolean f = job.waitForCompletion(true);
             if(f){
-                out.println("job任务执行成功");
+                out.println("job recommendfriends 任务执行成功");
             }
+            return f;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
+
+    // 对间接关系的朋友排序
+    public static boolean run2(Configuration configuration){
+        try {
+            //URI uri = new URI(hdfsUrl.trim());
+            FileSystem fs = FileSystem.get(configuration);
+            Job job = Job.getInstance(configuration);
+
+            job.setJarByClass(com.zwg.mapreduce.recommendfriends.RunJob.class);
+            job.setJobName("friendssort");
+            job.setMapperClass(RecommendFriendsSortMapper.class);
+            job.setReducerClass(RecommendFriendsSortReducer.class);
+            job.setSortComparatorClass(FriendsSort.class);
+            job.setGroupingComparatorClass(FriendsGroup.class);
+            job.setMapOutputKeyClass(User.class);
+            job.setMapOutputValueClass(User.class);
+            job.setInputFormatClass(KeyValueTextInputFormat.class);
+
+            //input和output的路径是指在HDFS上的路径，不是操作系统上的路径
+            FileInputFormat.addInputPath(job, new Path("/usr/hadoop/output/recommenfriends/part-r-00000"));
+
+            Path outpath = new Path("/usr/hadoop/output/recommenfriends/friendssort");
+            if(fs.exists(outpath)){
+                fs.delete(outpath, true);
+            }
+
+            FileOutputFormat.setOutputPath(job, outpath);
+
+            boolean f = job.waitForCompletion(true);
+            if(f){
+                out.println("job friendssort 任务执行成功");
+            }
+            return f;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
