@@ -9,6 +9,7 @@ public class FriendsGroup extends WritableComparator {
         super(User.class, true);
     }
 
+    @Override
     public int compare(WritableComparable a, WritableComparable b) {
         User u1 = (User) a;
         User u2 = (User) b;
