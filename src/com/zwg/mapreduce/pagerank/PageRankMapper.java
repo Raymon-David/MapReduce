@@ -5,6 +5,9 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
 
+/**
+ * @author zwg
+ */
 public class PageRankMapper extends Mapper<Text, Text, Text, Text> {
 
     @Override

@@ -5,6 +5,9 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 
+/**
+ * @author zwg
+ */
 public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
     @Override
